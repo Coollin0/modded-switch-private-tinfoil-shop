@@ -3,13 +3,13 @@ Host your Nintendo Switch game backups with your own private Tinfoil shop.
 
 
 
-# What is this?
+# ✨ What is this?
 
 A minimalist, self-hosted shop serving a shop.json over HTTPS/HTTP. Your modded Switch (Tinfoil) reads this file and you can downloads the listed titles directly from your server.
 
 
 
-# Architecture
+# 🧱 Architecture
 
 Nginx: Static host for /titles/* + /shop.json (Range requests, MIME types, SSL)
 
@@ -19,7 +19,7 @@ Nginx: Static host for /titles/* + /shop.json (Range requests, MIME types, SSL)
 
 
 
-# Requirements
+# 🧩 Requirements
 
 Ubuntu/Debian VPS or home server
 
@@ -29,33 +29,33 @@ Domain + DNS A/AAAA record
 
 Recommended: Let’s Encrypt certificate (Certbot)
 
-Tinfoil ≥ 20
+Tinfoil (≥ 20.0)
 
 
 
-# Setup (Quick)
+# ⚙️ Setup (Quick)
 
 1. Prepare system & folders
 
-
+```bash
 sudo apt update && sudo apt install -y nginx python3 python3-venv jq
 sudo mkdir -p /home/<user>/titles
 sudo chown -R <user>:<user> /home/<user>/titles
-
+```
 
 2. Nginx site – configure /etc/nginx/sites-available/tinfoil with HTTP and HTTPS blocks pointing to /home/<user>/titles.
 
 3. Let’s Encrypt (recommended)
 
-
+```bash
 sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d example.com
-
+```
 
 4. shop.json format – must contain a files array:
 
 
-
+```json
 {
   "files": [
     {
@@ -70,7 +70,7 @@ sudo certbot --nginx -d example.com
     }
   ]
 }
-
+```
 
 
 5. Tinfoil config
@@ -89,10 +89,10 @@ Path: /shop.json
 Enabled: Yes
 
 
-# Auto-Sync Script Example
+# 🔁 Auto-Sync Script Example
 
 
-
+```python
 #!/usr/bin/env python3
 import os, json
 TITLES = "/home/<user>/titles"
@@ -118,26 +118,28 @@ for fn in sorted(os.listdir(TITLES)):
 with open(os.path.join(TITLES, "shop.json"), "w") as f:
     json.dump({"files": files}, f, indent=2)
 print("shop.json updated:", len(files), "entries")
+```
 
 
-
-# Contributing
+# 🤝 Contributing
 
 Pull requests are welcome!If you have ideas for improvements or bug fixes, feel free to fork the repo and submit a PR.For major changes, please open an issue first to discuss what you would like to change.
 
 
-# Security
+# 🔒 Security
 
 Use HTTPS whenever possible
 
-Enable firewall: ufw allow 80,443/tcp
-
+Enable firewall: 
+```bash
+ufw allow 80,443/tcp
+```
 Restrict access via Basic Auth/IP whitelist if needed
 
 Keep Nginx and OS updated
 
 
-# Troubleshooting
+# 🧰 Troubleshooting
 
 SSL Connection failed in Tinfoil → Check and set Switch time/date correctly
 
@@ -146,11 +148,11 @@ Empty list → Ensure shop.json contains { "files": [ ... ] }
 Downloads stop → Ensure Nginx sends Accept-Ranges: bytes
 
 
-# License
+# 📜 License
 
 This project is licensed under the MIT License.Do not commit copyrighted files.
 
 
-# Legal
+# ⚠️ Legal
 
 This project is for private, personal use with your own backups. Sharing or offering copyrighted content is illegal in many countries.
