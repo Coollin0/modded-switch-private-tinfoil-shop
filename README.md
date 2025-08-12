@@ -1,11 +1,15 @@
 # modded-switch-private-tinfoil-shop
 Host your Nintendo Switch game backups with your own private Tinfoil shop.
 
-✨ What is this?
+
+
+# What is this?
 
 A minimalist, self-hosted shop serving a shop.json over HTTPS/HTTP. Your modded Switch (Tinfoil) reads this file and you can downloads the listed titles directly from your server.
 
-🧱 Architecture
+
+
+# Architecture
 
 Nginx: Static host for /titles/* + /shop.json (Range requests, MIME types, SSL)
 
@@ -13,7 +17,9 @@ Nginx: Static host for /titles/* + /shop.json (Range requests, MIME types, SSL)
 
 /home/<user>/titles/: Folder with your files (e.g., *.nsp, *.nsz, *.xci) and images
 
-🧩 Requirements
+
+
+# Requirements
 
 Ubuntu/Debian VPS or home server
 
@@ -25,22 +31,30 @@ Recommended: Let’s Encrypt certificate (Certbot)
 
 Tinfoil ≥ 20
 
-⚙️ Setup (Quick)
 
-Prepare system & folders
+
+# Setup (Quick)
+
+1. Prepare system & folders
+
 
 sudo apt update && sudo apt install -y nginx python3 python3-venv jq
 sudo mkdir -p /home/<user>/titles
 sudo chown -R <user>:<user> /home/<user>/titles
 
-Nginx site – configure /etc/nginx/sites-available/tinfoil with HTTP and HTTPS blocks pointing to /home/<user>/titles.
 
-Let’s Encrypt (recommended)
+2. Nginx site – configure /etc/nginx/sites-available/tinfoil with HTTP and HTTPS blocks pointing to /home/<user>/titles.
+
+3. Let’s Encrypt (recommended)
+
 
 sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d example.com
 
-shop.json format – must contain a files array:
+
+4. shop.json format – must contain a files array:
+
+
 
 {
   "files": [
@@ -57,7 +71,10 @@ shop.json format – must contain a files array:
   ]
 }
 
-Tinfoil config
+
+
+5. Tinfoil config
+
 
 Name: Private Shop
 
@@ -71,7 +88,10 @@ Path: /shop.json
 
 Enabled: Yes
 
-🔁 Auto-Sync Script Example
+
+# Auto-Sync Script Example
+
+
 
 #!/usr/bin/env python3
 import os, json
@@ -99,11 +119,14 @@ with open(os.path.join(TITLES, "shop.json"), "w") as f:
     json.dump({"files": files}, f, indent=2)
 print("shop.json updated:", len(files), "entries")
 
-🤝 Contributing
+
+
+# Contributing
 
 Pull requests are welcome!If you have ideas for improvements or bug fixes, feel free to fork the repo and submit a PR.For major changes, please open an issue first to discuss what you would like to change.
 
-🔒 Security
+
+# Security
 
 Use HTTPS whenever possible
 
@@ -113,7 +136,8 @@ Restrict access via Basic Auth/IP whitelist if needed
 
 Keep Nginx and OS updated
 
-🧰 Troubleshooting
+
+# Troubleshooting
 
 SSL Connection failed in Tinfoil → Check and set Switch time/date correctly
 
@@ -121,10 +145,12 @@ Empty list → Ensure shop.json contains { "files": [ ... ] }
 
 Downloads stop → Ensure Nginx sends Accept-Ranges: bytes
 
-📜 License
+
+# License
 
 This project is licensed under the MIT License.Do not commit copyrighted files.
 
-⚠️ Legal
+
+# Legal
 
 This project is for private, personal use with your own backups. Sharing or offering copyrighted content is illegal in many countries.
